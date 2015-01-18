@@ -302,9 +302,14 @@ class AtariTankPanel extends TemplatePanel	{
 		soundTimer = new Timer(10, ST);
 		baseControlTimer = new Timer(1000, BCT);
 
-		saves = new File[4];
-		for (int i = 0; i < saves.length; i++)
-			saves[i] = new File("AtariTanksLevel" + (i + 1) + ".txt");
+		//saves = new File[4
+		int i;
+		for (i = 0; ; i++)
+			if (!(new File("AtariTanksLevel" + (i + 1) + ".txt").exists()))
+				break;
+		saves = new File[i];
+		for (int a = 0; a < i; a++)
+			saves[a] = new File("AtariTanksLevel" + (a + 1) + ".txt");
 
 		//saves[0] = new File("AtariTanksLevel1.txt");
 		//saves[1] = new File("AtariTanksLevel2.txt");
@@ -822,7 +827,7 @@ class AtariTankPanel extends TemplatePanel	{
 		}
 		if (key == 'c') {	changePixelSize();	repaint();	}
 		if (key == 'p' && editLevels) save();
-		if (tankValues[0][4] == -1 && tankValues[0][9] == -1) {
+		if (tankValues[0][4] == -1 && tankValues[0][9] == -1 && !editLevels) {
 			//System.out.println(e.isShiftDown());
 			if (key == 'a' || key == 'A') turnTank(0, -1);
 			if (key == 'd' || key == 'D') turnTank(0,  1);
@@ -830,20 +835,20 @@ class AtariTankPanel extends TemplatePanel	{
 			if (key == 's' || key == 'S')	moveTank(0,  -1);
 			if (e.isShiftDown() && tankValues[1][9] == -1) shoot(0);
 		}
-		else if (tankValues[0][9] == -1)	{
+		else if (tankValues[0][9] == -1 && !editLevels)	{
 			if (key == 'a' || key == 'A')	changeBullet(0, -1, 0);
 			if (key == 'd' || key == 'D')	changeBullet(0,	 1, 0);
 			if (key == 'w' || key == 'W') changeBullet(0, 0, -1);
 			if (key == 's' || key == 'S')	changeBullet(0,  0, 1);
 		}
-		if (tankValues[1][4] == -1 && tankValues[1][9] == -1)	{
+		if (tankValues[1][4] == -1 && tankValues[1][9] == -1 && !editLevels)	{
 			if (code == KeyEvent.VK_LEFT) 	turnTank(1, -1);
 			if (code == KeyEvent.VK_RIGHT) 	turnTank(1,  1);
 			if (code == KeyEvent.VK_UP)		moveTank(1,  1);
 			if (code == KeyEvent.VK_DOWN)	moveTank(1,  -1);
 			if (e.isControlDown() && tankValues[0][9] == -1)	shoot(1);
 		}
-		else if (tankValues[1][9] == -1)	{
+		else if (tankValues[1][9] == -1 && !editLevels)	{
 			if (code == KeyEvent.VK_LEFT) 	changeBullet(1, -1, 0);
 			if (code == KeyEvent.VK_RIGHT) 	changeBullet(1, 1, 0);
 			if (code == KeyEvent.VK_UP)		changeBullet(1, 0, -1);
@@ -895,10 +900,10 @@ class AtariTankPanel extends TemplatePanel	{
 	}
 	public void save()	{
 		try {
-			output = new PrintWriter(saves[3]);
+			output = new PrintWriter("AtariTanksLevel" + saves.length + ".txt");
 		}
 		catch (IOException e)	{
-			System.err.println("ERROR: Cannot open file AtariTanksLevel2.txt");
+			System.err.println("ERROR: Cannot open file AtariTanksLevel" + saves.length + ".txt");
 			System.exit(99);
 		}
 		for (int row = 0; row < map.length; row++)
