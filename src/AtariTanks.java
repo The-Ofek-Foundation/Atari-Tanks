@@ -900,10 +900,10 @@ class AtariTankPanel extends TemplatePanel	{
 	}
 	public void save()	{
 		try {
-			output = new PrintWriter("AtariTanksLevel" + saves.length + ".txt");
+			output = new PrintWriter("AtariTanksLevel" + (saves.length + 1) + ".txt");
 		}
 		catch (IOException e)	{
-			System.err.println("ERROR: Cannot open file AtariTanksLevel" + saves.length + ".txt");
+			System.err.println("ERROR: Cannot open file AtariTanksLevel" + (saves.length+1) + ".txt");
 			System.exit(99);
 		}
 		for (int row = 0; row < map.length; row++)
